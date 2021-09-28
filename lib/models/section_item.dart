@@ -6,7 +6,7 @@ class SectionItem{
     image = map['image'] as String;
     product = map['product'] as String;
   }
-  String image;
+  dynamic image;
   String product;
 
   SectionItem clone(){
@@ -14,6 +14,13 @@ class SectionItem{
       image: image,
       product: product,
     );
+  }
+
+  Map<String, dynamic> toMap(){
+    return{
+      'image': image,
+      'product': product,
+    };
   }
 
   @override

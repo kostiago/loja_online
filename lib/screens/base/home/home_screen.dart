@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lojavirtual/custom_drawer/custom_drawer.dart';
 import 'package:lojavirtual/models/home_manager.dart';
 import 'package:lojavirtual/models/user_manager.dart';
+import 'package:lojavirtual/screens/base/home/components/add_section_widget.dart';
 import 'package:lojavirtual/screens/base/home/components/section_list.dart';
 import 'package:lojavirtual/screens/base/home/components/section_staggered.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Consumer2<UserManager, HomeManager>(
                     builder: (_,userManager, homeManager,__){
-                      if(userManager.adminEnabled){
+                      if(userManager.adminEnabled && !homeManager.loading){
                         if(homeManager.editing)
                           return PopupMenuButton(
                             onSelected: (e){
@@ -56,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                               }
                             },
                             itemBuilder: (_){
-                              return['Salvar','Apagar'].map((e){
+                              return['Salvar','Descartar'].map((e){
                                 return PopupMenuItem(
                                   value: e,
                                   child: Text(e),
@@ -79,6 +80,15 @@ class HomeScreen extends StatelessWidget {
 
               Consumer<HomeManager>(
                 builder: (_, homeManager, __){
+                  if(homeManager.loading){
+                    return SliverToBoxAdapter(
+                      child: LinearProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    );
+                  }
+
                   final List<Widget> children = homeManager.sections.map<Widget>(
                           (section) {
                         switch(section.type){
@@ -91,6 +101,9 @@ class HomeScreen extends StatelessWidget {
                         }
                       }
                   ).toList();
+
+                  if(homeManager.editing)
+                    children.add(AddSectionWidget(homeManager));
 
                   return SliverList(
                     delegate: SliverChildListDelegate(children),
