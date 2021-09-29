@@ -41,6 +41,9 @@ dependencies:
   image_cropper: ^1.2.3
   uuid: ^2.0.4
   dcdg: ^2.0.1
+  dio: ^3.0.9
+  brasil_fields: ^0.1.0
+  geolocator: ^5.3.1
   http:
 
 dev_dependencies:
